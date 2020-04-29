@@ -1,6 +1,9 @@
 <?php
 
 $content = file_get_contents('php://input');
+file_put_contents('/tmp/tmp', json_encode($content, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESACPED_SLASHES));
+
+$content = json_decode($content);
 if (strpos($content->mail->commonHeaders->subject, '付款成功確認信') === false) {
     exit;
 }
