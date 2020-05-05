@@ -8,11 +8,11 @@ if (strpos($content->mail->commonHeaders->subject, '付款成功確認信') === 
     exit;
 }
 $body = base64_decode($content->content);
-if (!preg_match('#Content-Type: multipart/alternative; boundary="([^"]*)"#', $body, $matches)) {
+if (!preg_match('#Content-Type: multipart/alternative;\s+boundary="([^"]*)"#s', $body, $matches)) {
     exit;
 }
 foreach (explode($matches[1], $body) as $part) {
-    if (0 !== strpos(trim($part), 'Content-Type: text/html; charset="UTF-8"')) {
+    if (false === stripos(trim($part), 'Content-Type: text/html; charset=utf-8')) {
         continue;
     }
 
