@@ -43,6 +43,7 @@ foreach (explode($matches[1], $body) as $part) {
     }
     $record['name'] = $values->{'捐款徵信顯示名稱'};
     $record['money'] = $values->{'金額'};
+    $record['time'] = time();
 
     $str .= " {$values->{'捐款徵信顯示名稱'}} 捐了 {$values->{'金額'}}";
     if ($c = $values->{'捐款備註'}) {
