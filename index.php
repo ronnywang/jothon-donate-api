@@ -27,21 +27,35 @@ foreach (explode($matches[1], $body) as $part) {
         }
         $values->{trim($td_doms->item(0)->nodeValue)} = trim($td_doms->item(1)->nodeValue);
     }
+    $record = array();
+
 	if (strpos($body, '這是一個定期定額捐款')) {
         $freq = true;
         $str = '[定期定額]';
+        $record['period'] = "1";
 	} else {
         $freq = false;
         $str = '';
+        $record['period'] = "0";
     }
     if ('' == $values->{'捐款徵信顯示名稱'}) {
         $values->{'捐款徵信顯示名稱'} = '沒有人';
     }
+    $record['name'] = $values->{'捐款徵信顯示名稱'};
+    $record['money'] = $values->{'金額'};
 
     $str .= " {$values->{'捐款徵信顯示名稱'}} 捐了 {$values->{'金額'}}";
     if ($c = $values->{'捐款備註'}) {
         $str .= "({$c})";
     }
+    $record['say'] = $c;
+    if (!$obj = json_decode(file_get_contents('/tmp/donate'))) {
+        $obj = array();
+    }
+    $obj[] = $record;
+    $obj = array_slice($obj, -10);
+    file_put_contents("/tmp/donates", json_encode($obj));
+
     echo $str . "\n";
     $token = getenv('token');
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon-organizers') . '&username=' . urlencode('揪松機器人'));
