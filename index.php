@@ -50,7 +50,7 @@ foreach (explode($matches[1], $body) as $part) {
         $str .= "({$c})";
     }
     $record['say'] = $c;
-    if (!$obj = json_decode(file_get_contents('/tmp/donate'))) {
+    if (!$obj = json_decode(file_get_contents('/tmp/donates'))) {
         $obj = array();
     }
     $obj[] = $record;
