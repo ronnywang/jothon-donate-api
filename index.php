@@ -42,7 +42,7 @@ foreach (explode($matches[1], $body) as $part) {
         $values->{'捐款徵信顯示名稱'} = '沒有人';
     }
     $record['name'] = $values->{'捐款徵信顯示名稱'};
-    $record['money'] = $values->{'金額'};
+    $record['money'] = preg_replace('/[^0-9]/', '', $values->{'金額'});
     $record['time'] = time();
 
     $str .= " {$values->{'捐款徵信顯示名稱'}} 捐了 {$values->{'金額'}}";
