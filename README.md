@@ -17,10 +17,11 @@ jothon donate bot
     * 收到信件的話，把信件內容丟進 /tmp/tmp 內，以便偵錯使用
     * 如果確定是捐款通知信的話，將捐款資訊以 JSON 格式寫入 /tmp/donates 內（只會寫入最新十筆）
     * 如果確定是捐款通知信的話，將捐款資訊透過 slack 通知至揪松的 slack 頻道
+  * 這個網址請盡量只給 AWS SNS 使用，請勿公開，以免被人偽造捐款通知。
 * donate-api.php
   * 將 /tmp/donates 內最新十筆捐款記錄以 CORS API 的型式輸出給前端使用
   * [g0v/donate-checker](https://github.com/g0v/donate-checker) 是一個前端介面
     * 可以用 https://g0v.github.io/donate-checker/index.html?url=https://your-domain/donate-api.php 讓前端介面顯示你的捐款資訊
       * 以上 your-domain 請替換成你自己架設的網域
     * 前端會每五秒去 API 查詢是否有新捐款，並以動畫型式呈現
-    * 前端頁面主要設計是給 OBS 直播用，請盡量不要直接嵌入在對外網站上，以免太多人瀏覽會造成後端存取量過大
+    * 前端頁面主要設計是給 OBS 直播用，請盡量不要直接嵌入在對外網站上，以免太多人瀏覽會造成後端存取量過大，放在對外網站也可能造成 index.php 網址外洩造成別人可偽造捐款通知
