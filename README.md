@@ -25,3 +25,9 @@ jothon donate bot
       * 以上 your-domain 請替換成你自己架設的網域
     * 前端會每五秒去 API 查詢是否有新捐款，並以動畫型式呈現
     * 前端頁面主要設計是給 OBS 直播用，請盡量不要直接嵌入在對外網站上，以免太多人瀏覽會造成後端存取量過大，放在對外網站也可能造成 index.php 網址外洩造成別人可偽造捐款通知
+* fake-donate.php
+  * 給測試前端的人專用的產生假 donate 資料，確定通知是否正常顯示用的，會將假資料寫入 /tmp/fake-donates 中
+  * 可以使用 https://jothon-donate-test.ronny.tw/fake-donate.php 測試
+* fake-donate-api.php
+  * 與 donate-api.php 一樣輸出最新十筆捐款記錄，不過是 /tmp/fake-donates 下的假資料
+  * 在 https://g0v.github.io/donate-checker/index.html 測試使用，可以開著 https://g0v.github.io/donate-checker/index.html 頁面，然後在 https://jothon-donate-test.ronny.tw/fake-donate.php 輸入假資料看看會不會有抖內資訊顯示
