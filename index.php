@@ -61,7 +61,7 @@ foreach (explode($matches[1], $body) as $part) {
     $token = getenv('token');
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon') . '&username=' . urlencode('揪松機器人'));
     curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
-    curl_exec($curl);
+    //curl_exec($curl);
 //     [金額] => NT$ 300
 	//[捐款徵信顯示名稱] => YiJin
    // [捐款備註] =>
