@@ -7,4 +7,4 @@ if (!is_array($obj)) {
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
-echo json_encode($obj);
+echo json_encode($obj, JSON_UNESCAPED_UNICODE);
