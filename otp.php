@@ -4,6 +4,10 @@ if (file_exists('config.php')) {
     include('config.php');
 }
 
+$secret = getenv('otpsecret');
+$secret_terms = explode('&', $secret);
+$secret_terms = array_map(function($s) { return explode('=', $s); }, $secret_terms);
+
 if ($_GET['secret'] != getenv('otppagesecret')) {
     echo 'wrong secret';
     exit;
@@ -120,15 +124,25 @@ function dynamicTruncationFn($hmacValue) {
    );
 }
 
-if ($_POST['name']) {
-    $secret = getenv('otpsecret');
+if ($_POST['name'] and $_POST['type']) {
     $counter = floor(time() / 30);
+    $secret = null;
+    foreach ($secret_terms as $secret_term) {
+        if ($secret_term[0] == $_POST['type']) {
+            $secret = $secret_term[1];
+            break;
+        }
+    }
+    if (!$secret) {
+        echo 'failed';
+        exit;
+    }
     $code = generateHOTP(strtoupper($secret), $counter);
 
     $username = '揪松兩步驗證';
     $token = getenv('token');
     $channel = getenv('channel');
-    $str = sprintf("%s 要登入揪松 google 帳號，驗證碼為 %06d", $_POST['name'], $code);
+    $str = sprintf("%s 要登入揪松 %s 帳號，驗證碼為 %06d", $_POST['name'], $_POST['type'], $code);
 
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode($channel) . '&username=' . urlencode($username));
     curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
@@ -150,7 +164,12 @@ if ($_POST['name']) {
 <h1>揪松兩步驗證</h1>
 <p>六位數驗證碼將會傳送至 <?= getenv('channel') ?> 頻道</p>
 <form method="post" action="">
-    我是<input type="text" placeholder="請輸入您的暱稱" name="name" required="required">
+    我是<input type="text" placeholder="請輸入您的暱稱" name="name" required="required"><br>
+    服務： <select name="type">
+        <?php foreach ($secret_terms as $secret_term) { ?>
+        <option value="<?= $secret_term[0] ?>"><?= $secret_term[0] ?></option>
+        <?php } ?>
+    </select>
     <button type="submit">送出</button>
 </form>
 </body>
