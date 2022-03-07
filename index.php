@@ -78,7 +78,7 @@ foreach (explode($matches[1], $body) as $part) {
         $str .= '[定期定額]';
     }
     $str .= "{$values->donor} 捐贈 {$values->{'金額'}} ({$values->{'日期'}})";
-    $str .= "(徵信顯示名稱={$values->{'捐款徵信顯示名稱'}}, 備註={$values->{'備註'}})";
+    $str .= "(徵信顯示名稱={$values->{'捐款徵信顯示名稱'}}, 備註={$values->{'捐款備註'}})";
     echo $str . "\n";
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon-donor') . '&username=' . urlencode('揪松機器人'));
     curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
