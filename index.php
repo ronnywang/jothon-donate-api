@@ -33,10 +33,12 @@ foreach (explode($matches[1], $body) as $part) {
         $freq = true;
         $str = '[定期定額]';
         $record['period'] = "1";
+        $values->{'定期定額'} = true;
 	} else {
         $freq = false;
         $str = '';
         $record['period'] = "0";
+        $values->{'定期定額'} = false;
     }
     if ('' == $values->{'捐款徵信顯示名稱'}) {
         $values->{'捐款徵信顯示名稱'} = '沒有人';
@@ -57,11 +59,28 @@ foreach (explode($matches[1], $body) as $part) {
     $obj = array_slice($obj, -10);
     file_put_contents("/tmp/donates", json_encode($obj));
 
-    echo $str . "\n";
     $token = getenv('token');
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon') . '&username=' . urlencode('揪松機器人'));
     curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
     //curl_exec($curl);
+
+    // 不公開版本
+    foreach ($content->mail->headers as $header) {
+        if ($header->name == 'To') {
+            $donor = $header->value;
+            break;
+        }
+    }
+    $values->donor = $donor;
+    $str = '';
+    if ($values->{'定期定額'} ){
+        $str .= '[定期定額]';
+    }
+    $str .= "{$values->donor} 捐贈 {$values->{'金額'}} ({$values->{'日期'}})";
+    echo $str . "\n";
+    $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon-donor') . '&username=' . urlencode('揪松機器人'));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
+    curl_exec($curl);
 //     [金額] => NT$ 300
 	//[捐款徵信顯示名稱] => YiJin
    // [捐款備註] =>
