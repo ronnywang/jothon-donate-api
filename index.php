@@ -40,14 +40,15 @@ foreach (explode($matches[1], $body) as $part) {
         $record['period'] = "0";
         $values->{'定期定額'} = false;
     }
-    if ('' == $values->{'捐款徵信顯示名稱'}) {
-        $values->{'捐款徵信顯示名稱'} = '沒有人';
-    }
     $record['name'] = $values->{'捐款徵信顯示名稱'};
     $record['money'] = preg_replace('/[^0-9]/', '', $values->{'金額'});
     $record['time'] = time();
 
-    $str .= " {$values->{'捐款徵信顯示名稱'}} 捐了 {$values->{'金額'}}";
+    $name = $values->{'捐款徵信顯示名稱'};
+    if (!$name) {
+        $name = '沒有人';
+    }
+    $str .= " {$name} 捐了 {$values->{'金額'}}";
     if ($c = $values->{'捐款備註'}) {
         $str .= "({$c})";
     }
@@ -77,6 +78,7 @@ foreach (explode($matches[1], $body) as $part) {
         $str .= '[定期定額]';
     }
     $str .= "{$values->donor} 捐贈 {$values->{'金額'}} ({$values->{'日期'}})";
+    $str .= "(徵信顯示名稱={$values->{'捐款徵信顯示名稱'}}, 備註={$values->{'備註'}})";
     echo $str . "\n";
     $curl = curl_init('https://slack.com/api/chat.postMessage?token=' . urlencode($token) . '&channel=' . urlencode('#jothon-donor') . '&username=' . urlencode('揪松機器人'));
     curl_setopt($curl, CURLOPT_POSTFIELDS, 'text=' . urlencode($str));
