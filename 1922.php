@@ -25,12 +25,12 @@ if ($_POST['name']) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>揪松實聯制</title>
+<title>龍年吼吼吼～開運紅包袋＆賀卡領取</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">
 </head>
 <body>
-<h1>揪松1922實聯制</h1>
+<h1>龍年吼吼吼～開運紅包袋＆賀卡領取</h1>
 <form method="post" action="1922.php">
     我是<input type="text" placeholder="請輸入您的暱稱" name="name" required="required">
     <button type="submit">送出</button>
