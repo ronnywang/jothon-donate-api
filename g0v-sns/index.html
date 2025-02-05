@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>g0v 抽籤器</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">
+</head>
+<body>
+<h1>抽籤</h1>
+<div id="area-sns" class="area">
+<p>從 <a href="https://docs.google.com/spreadsheets/d/1xyxYGKU7iia3xSu6rF9F6YCcXOcEqrFsI2RD493bAxE/edit#gid=0">g0v SNS 治理紀錄</a> 隨機排序(重新整理重刷名單)</p>
+</div>
+<div id="area-domain" class="area">
+<p>從 <a href="https://docs.google.com/spreadsheets/d/1m19E2ay55TcGjDc7YM_xdDjwmbhzIqpFYK5j8bAustg/edit#gid=0">g0v domain 治理紀錄</a> 隨機排序(重新整理重刷名單)</p>
+</div>
+<div id="area-calendar" class="area">
+<p>從 <a href="https://g0v.hackmd.io/mZ-LeFr1QJ6CuO6R3eeHnw">g0v calendar 治理紀錄</a> 隨機排序(重新整理重刷名單)</p>
+</div>
+<div id="result"></div>
+<script>
+if (document.location.href.match(/type=domain/)) {
+    data_url = '/g0v-sns/proxy.php?type=domain';
+    $('.area').hide();
+    $('#area-domain').show();
+} else if (document.location.href.match(/type=calendar/)) {
+    data_url = '/g0v-sns/proxy.php?type=calendar';
+    $('.area').hide();
+    $('#area-calendar').show();
+} else {
+    data_url = '/g0v-sns/proxy.php';
+    $('.area').hide();
+    $('#area-sns').show();
+}
+$.get(data_url, function(ret){
+        var lines = ret.split("\n");
+        var names = [];
+        for (var i = 1; i < lines.length; i ++) {
+            var line = lines[i];
+            var name = line.split(",")[0];
+            names.push(name);
+        }
+        names = names.sort(function(a, b){ return Math.random() - 0.5; });
+        names.map(function(name) {
+            $('#result').append($('<h2></h2>').text(name));
+        });
+}, 'text');
+</script>
+</body>
+</html>
